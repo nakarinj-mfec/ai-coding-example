@@ -50,7 +50,11 @@ def calculate_statistics(number_list: List[int]) -> Dict[str, Any]:
     }
 
 
-def generate_matplotlib_graph(number_list: List[int], filename: str = "bar_chart.png") -> str:
+def generate_matplotlib_graph(
+        number_list: List[int], 
+        filename: str = "bar_chart.png"
+    ) -> str:
+    
     if not number_list:
         return "No data to display"
 

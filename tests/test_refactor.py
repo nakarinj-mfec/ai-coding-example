@@ -1,6 +1,6 @@
 import unittest
 import copy # To avoid modifying the original test data
-from refactor import calculate_average_and_status, refactor_calculate_average_and_status, square_if_even, refactor_square_if_even
+from code.refactor import calculate_average_and_status, refactor_calculate_average_and_status, square_if_even, refactor_square_if_even
 
 class TestRefactor(unittest.TestCase):
 
