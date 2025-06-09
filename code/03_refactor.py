@@ -9,7 +9,6 @@ students = [
 
 # TODO: Refactor this function to reduces complexity and improve readability.
 # Refactor hints: reduces if else statements, default values
-# API_URL: https://68458248fc51878754db82d7.mockapi.io/api/studentScores
 def calculate_average_and_status(students: List[dict]) -> None:
     for student in students:
         total = 0
@@ -34,7 +33,6 @@ def calculate_average_and_status(students: List[dict]) -> None:
 # TODO: Refactor this function to use list comprehension and improve readability.
 # Refactor hints: use list comprehension to filter and map
 # ex. [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-# API_URL: https://68458248fc51878754db82d7.mockapi.io/api/squareIfEvenList
 def square_if_even(numbers: List[int]) -> List[int]:
     squares_of_evens = []
     for num in numbers:

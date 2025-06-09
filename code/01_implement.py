@@ -1,10 +1,20 @@
-from typing import List
+from typing import List, Dict, Any
 
 
-# TODO: Implement function to find the median of a list of numbers
-# API_URL: https://68458248fc51878754db82d7.mockapi.io/api/medianList
-def find_median(numbers: List[int]):
+# TODO: Improve function find_median to calculate various statistics from a list of numbers
+# The function should return a dictionary with the following keys:
+# - "median": the median of the list (ค่ามัธยฐาน)
+# - "mode": the mode(s) of the list (if multiple modes, return a list) (ฐานนิยม)
+# - "range": the range of the list (max - min) (ค่าพิสัย)
+# - "mean": the mean (average) of the list (ค่าเฉลี่ย)
+# - "count": the count of numbers in the list
+# - "sum": the sum of the numbers in the list
+# - "min": the minimum value in the list
+# - "max": the maximum value in the list
+def calculate_statistics(number_list: List[int]) -> Dict[str, Any]:
     pass
+
+calculate_statistics([1, 2, 3, 4, 5])
 
 
 # TODO: Implement function to generate a graph from a list of numbers
@@ -16,6 +26,5 @@ def find_median(numbers: List[int]):
 # 3: ***************
 # 4: ********************
 # 5: *************************
-# API_URL: https://68458248fc51878754db82d7.mockapi.io/api/graphList
 def generate_graph(data: List[int]):
     pass
