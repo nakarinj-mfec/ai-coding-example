@@ -1,5 +1,11 @@
 import unittest
-from code.implement import find_median, generate_graph
+
+from code.util import import_module
+
+implement_module = import_module("implement", "01_implement.py")
+find_median = implement_module.find_median
+generate_graph = implement_module.generate_graph
+
 
 class TestImplement(unittest.TestCase):
 

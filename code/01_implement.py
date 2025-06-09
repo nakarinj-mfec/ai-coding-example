@@ -1,30 +1,21 @@
 from typing import List
 
-# example: [5, 10, 15, 20, 25]
-def find_median(number_list: List[int]) -> int:
-    if not number_list:
-        return 0
-    
-    sorted_list = sorted(number_list)
-    n = len(sorted_list)
-    mid_index = n // 2
-    
-    if n % 2 == 1:
-        return sorted_list[mid_index]
-    else:
-        return (sorted_list[mid_index - 1] + sorted_list[mid_index]) // 2
+
+# TODO: Implement function to find the median of a list of numbers
+# API_URL: https://68458248fc51878754db82d7.mockapi.io/api/medianList
+def find_median(numbers: List[int]):
+    pass
 
 
-def generate_graph(number_list: List[int]) -> str:
-    if not number_list:
-        return "No data to display"
-
-    graph_lines = []
-    for index, value in enumerate(number_list):
-        if value < 0:
-            bar = "(negative value)" 
-        else:
-            bar = '*' * value
-        graph_lines.append(f"{index+1}: {bar}")
-    
-    return "\n".join(graph_lines)
+# TODO: Implement function to generate a graph from a list of numbers
+# The graph should represent the numbers as asterisks, with each asterisk representing one unit.
+# If the number is negative, it should be represented as "(negative value)".
+# Example: [5, 10, 15, 20, 25] should return:
+# 1: *****
+# 2: **********
+# 3: ***************
+# 4: ********************
+# 5: *************************
+# API_URL: https://68458248fc51878754db82d7.mockapi.io/api/graphList
+def generate_graph(data: List[int]):
+    pass

@@ -1,7 +1,11 @@
 import unittest
 import os
 import shutil
-from code.improve import calculate_statistics, generate_matplotlib_graph
+
+from code.util import import_module
+improve_module = import_module("improve", "02_improve.py")
+calculate_statistics = improve_module.calculate_statistics
+generate_matplotlib_graph = improve_module.generate_matplotlib_graph
 
 class TestImprove(unittest.TestCase):
 

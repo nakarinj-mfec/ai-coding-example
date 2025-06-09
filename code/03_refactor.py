@@ -1,6 +1,5 @@
 from typing import List
 
-# example 1
 students = [
     {"name": "Alice", "scores": [80, 75, 90]},
     {"name": "Bob", "scores": [60, 65, 70]},
@@ -8,7 +7,9 @@ students = [
     {"name": "Daisy", "scores": [40, 50, 45]}
 ]
 
-# หาค่าเฉลี่ย และตรวจสอบว่าเกิน 70 ไหม
+# TODO: Refactor this function to reduces complexity and improve readability.
+# Refactor hints: reduces if else statements, default values
+# API_URL: https://68458248fc51878754db82d7.mockapi.io/api/studentScores
 def calculate_average_and_status(students: List[dict]) -> None:
     for student in students:
         total = 0
@@ -30,31 +31,13 @@ def calculate_average_and_status(students: List[dict]) -> None:
             student["is_passed"] = False
 
 
-def refactor_calculate_average_and_status(students: List[dict]) -> None:
-    for student in students:
-        scores = student["scores"]
-
-        student["average"] = 0
-        student["is_passed"] = False
-
-        if not scores:
-            continue
-        
-        average = sum(scores) / len(scores)
-        student["average"] = average
-        student["is_passed"] = average >= 70
-
-
-
-# Example 2 list comprehension and seperate function
-
-numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-def square_if_even(num: int) -> List[int]:
+# TODO: Refactor this function to use list comprehension and improve readability.
+# Refactor hints: use list comprehension to filter and map
+# ex. [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+# API_URL: https://68458248fc51878754db82d7.mockapi.io/api/squareIfEvenList
+def square_if_even(numbers: List[int]) -> List[int]:
     squares_of_evens = []
     for num in numbers:
         if num % 2 == 0:
             squares_of_evens.append(num ** 2)
-        
-
-def refactor_square_if_even(numbers: List[int]) -> List[int]:
-    return [num ** 2 for num in numbers if num % 2 == 0]
+    return squares_of_evens
