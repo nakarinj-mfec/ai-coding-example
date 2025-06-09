@@ -1,15 +1,15 @@
+from typing import List
 import requests
-import matplotlib
 import matplotlib.pyplot as plt
 
 
-# TODO: Implement function to ger sales chart for each productfrom API get sales order data and plot bar chart
+# TODO: Implement function to get sales chart for each productfrom API get sales order data and plot bar chart
 # API_URL: https://68458248fc51878754db82d7.mockapi.io/api/salesOrderList
 def get_sales_chart_data():
     pass
 
 
-def plot_bar_chart(product_names, quantities):
+def plot_bar_chart(product_names: List[str], quantities: List[int]):
     """
     Plots a bar chart of product quantities.
 
