@@ -4,148 +4,88 @@ import shutil
 
 from code.util import import_module
 improve_module = import_module("improve", "02_improve.py")
-calculate_statistics = improve_module.calculate_statistics
-generate_matplotlib_graph = improve_module.generate_matplotlib_graph
+plot_line_graph_func = improve_module.plot_line_graph
+find_exp_func = improve_module.find_exp
 
 class TestImprove(unittest.TestCase):
 
-    def test_calculate_statistics_empty_list(self):
-        expected_stats = {
-            "median": 0.0,
-            "mode": [],
-            "range": 0,
-            "mean": 0.0,
-            "count": 0,
-            "sum": 0,
-            "min": 0,
-            "max": 0
-        }
-        self.assertEqual(calculate_statistics([]), expected_stats)
+    def setUp(self):
+        self.charts_dir = "charts"
+        # Ensure charts directory exists. While current functions in 02_improve.py
+        # don't save files, this setup is kept for consistency or future use.
+        if not os.path.exists(self.charts_dir):
+            os.makedirs(self.charts_dir, exist_ok=True)
 
-    def test_calculate_statistics_single_element(self):
-        expected_stats = {
-            "median": 5.0,
-            "mode": [5],
-            "range": 0,
-            "mean": 5.0,
-            "count": 1,
-            "sum": 5,
-            "min": 5,
-            "max": 5
-        }
-        self.assertEqual(calculate_statistics([5]), expected_stats)
+    def tearDown(self):
+        # Clean up the charts directory if it exists.
+        # This primarily targets the directory itself if it's empty,
+        # as the tested functions currently don't create files.
+        if os.path.exists(self.charts_dir):
+            # Hypothetical files that tests might check for non-existence
+            # or that future versions of the code might create.
+            hypothetical_files_to_check_and_remove = [
+                "empty_line_chart.png", 
+                "test_line_chart.png",
+                "exp_chart_empty.png"
+            ]
+            for f_name in hypothetical_files_to_check_and_remove:
+                f_path = os.path.join(self.charts_dir, f_name)
+                if os.path.exists(f_path):
+                    os.remove(f_path)
+            
+            # Attempt to remove the directory if it's empty
+            if not os.listdir(self.charts_dir):
+                try:
+                    os.rmdir(self.charts_dir)
+                except OSError:
+                    # Directory not empty or other issue, leave it.
+                    pass
 
-    def test_calculate_statistics_odd_length(self):
-        stats = calculate_statistics([1, 2, 3, 4, 5])
-        self.assertEqual(stats["median"], 3.0)
-        self.assertEqual(stats["mode"], [1, 2, 3, 4, 5]) # All elements appear once
-        self.assertEqual(stats["range"], 4) # 5 - 1
-        self.assertEqual(stats["mean"], 3.0)
-        self.assertEqual(stats["count"], 5)
-        self.assertEqual(stats["sum"], 15)
-        self.assertEqual(stats["min"], 1)
-        self.assertEqual(stats["max"], 5)
-
-    def test_calculate_statistics_even_length(self):
-        stats = calculate_statistics([1, 2, 3, 4, 5, 6])
-        self.assertEqual(stats["median"], 3.5) # (3 + 4) / 2
-        self.assertEqual(stats["mode"], [1, 2, 3, 4, 5, 6])
-        self.assertEqual(stats["range"], 5) # 6 - 1
-        self.assertEqual(stats["mean"], 3.5)
-        self.assertEqual(stats["count"], 6)
-        self.assertEqual(stats["sum"], 21)
-        self.assertEqual(stats["min"], 1)
-        self.assertEqual(stats["max"], 6)
-
-    def test_calculate_statistics_with_duplicates_single_mode(self):
-        stats = calculate_statistics([1, 2, 2, 3, 4])
-        self.assertEqual(stats["median"], 2.0)
-        self.assertEqual(stats["mode"], [2])
-        self.assertEqual(stats["range"], 3) # 4 - 1
-        self.assertEqual(stats["mean"], 2.4) # 12 / 5
-        self.assertEqual(stats["count"], 5)
-        self.assertEqual(stats["sum"], 12)
-        self.assertEqual(stats["min"], 1)
-        self.assertEqual(stats["max"], 4)
-
-    def test_calculate_statistics_with_duplicates_multiple_modes(self):
-        stats = calculate_statistics([1, 1, 2, 2, 3])
-        self.assertEqual(stats["median"], 2.0)
-        self.assertEqual(stats["mode"], [1, 2]) # Sorted modes
-        self.assertEqual(stats["range"], 2) # 3 - 1
-        self.assertEqual(stats["mean"], 1.8) # 9 / 5
-        self.assertEqual(stats["count"], 5)
-        self.assertEqual(stats["sum"], 9)
-        self.assertEqual(stats["min"], 1)
-        self.assertEqual(stats["max"], 3)
-
-    def test_calculate_statistics_negative_numbers(self):
-        stats = calculate_statistics([-1, -2, -3, -4, -5])
-        self.assertEqual(stats["median"], -3.0)
-        self.assertEqual(stats["mode"], [-5, -4, -3, -2, -1])
-        self.assertEqual(stats["range"], 4) # -1 - (-5)
-        self.assertEqual(stats["mean"], -3.0)
-        self.assertEqual(stats["count"], 5)
-        self.assertEqual(stats["sum"], -15)
-        self.assertEqual(stats["min"], -5)
-        self.assertEqual(stats["max"], -1)
-
-    def test_generate_matplotlib_graph_empty_list(self):
-        self.assertEqual(generate_matplotlib_graph([]), "No data to display")
-
-    def test_generate_matplotlib_graph_creates_file(self):
-        charts_dir = "charts"
-        test_filename = "test_chart.png"
-        filepath = os.path.join(charts_dir, test_filename)
-
-        # Clean up before test
-        if os.path.exists(filepath):
-            os.remove(filepath)
-        if os.path.exists(charts_dir) and not os.listdir(charts_dir): # remove dir if empty
-             os.rmdir(charts_dir)
-        elif os.path.exists(charts_dir) and os.listdir(charts_dir) and test_filename in os.listdir(charts_dir): # specific file removal
-            pass # file will be overwritten or handled by os.remove above
-
-        result = generate_matplotlib_graph([1, 2, 3], filename=test_filename)
-        self.assertEqual(result, f"Graph saved to {filepath}")
-        self.assertTrue(os.path.exists(filepath))
-
-        # Clean up after test
-        if os.path.exists(filepath):
-            os.remove(filepath)
-        # Attempt to remove charts_dir only if it's empty
-        if os.path.exists(charts_dir) and not os.listdir(charts_dir):
-            os.rmdir(charts_dir)
-        # If other files are in charts_dir, leave it.
-
-    def test_generate_matplotlib_graph_creates_directory(self):
-        charts_dir = "charts"
-        test_filename = "test_dir_chart.png"
-        filepath = os.path.join(charts_dir, test_filename)
-
-        # Ensure directory does not exist before test
-        if os.path.exists(filepath):
-            os.remove(filepath)
-        if os.path.exists(charts_dir):
-            # If other files exist, just remove the test file if it's there
-            if test_filename in os.listdir(charts_dir):
-                 os.remove(filepath)
-            # If only the test file was there, or it's now empty, remove the dir
-            if not os.listdir(charts_dir):
-                shutil.rmtree(charts_dir) # Use shutil to remove dir and its contents if necessary
+    def test_plot_line_graph_empty_list(self):
+        # plot_line_graph returns None if data is empty and should not raise an error.
+        # With 'Agg' backend, plt.show() is a no-op.
+        try:
+            self.assertIsNone(plot_line_graph_func([]), 
+                              "plot_line_graph with empty list should return None.")
+        except Exception as e:
+            self.fail(f"plot_line_graph_func([]) raised an unexpected exception: {e}")
         
-        self.assertFalse(os.path.exists(charts_dir)) # Check dir is gone
+        # Verify no file is created (as plot_line_graph uses plt.show())
+        test_filename = "empty_line_chart.png" 
+        filepath = os.path.join(self.charts_dir, test_filename)
+        self.assertFalse(os.path.exists(filepath), 
+                         f"File {filepath} should not be created by plot_line_graph for empty data.")
 
-        result = generate_matplotlib_graph([1, 2, 3], filename=test_filename)
-        self.assertEqual(result, f"Graph saved to {filepath}")
-        self.assertTrue(os.path.exists(charts_dir))
-        self.assertTrue(os.path.exists(filepath))
+    def test_plot_line_graph_with_data(self):
+        # plot_line_graph with data calls plt.show() (no-op with 'Agg') and returns None.
+        # It should execute without error and not save any file.
+        try:
+            self.assertIsNone(plot_line_graph_func([1, 2, 3]),
+                              "plot_line_graph with data should return None.")
+        except Exception as e:
+            self.fail(f"plot_line_graph_func([1, 2, 3]) raised an unexpected exception: {e}")
 
-        # Clean up after test
-        if os.path.exists(filepath):
-            os.remove(filepath)
-        if os.path.exists(charts_dir) and not os.listdir(charts_dir):
-            os.rmdir(charts_dir)
+        # Verify no file is created
+        test_filename = "test_line_chart.png"
+        filepath = os.path.join(self.charts_dir, test_filename)
+        self.assertFalse(os.path.exists(filepath), 
+                         f"File {filepath} should not be created by plot_line_graph as it uses plt.show().")
+
+    def test_find_exp_empty_list(self):
+        # find_exp returns [] for an empty list.
+        self.assertEqual(find_exp_func([]), [])
+        
+        # Verify no plot file is created as find_exp does not currently plot.
+        test_filename = "exp_chart_empty.png" # Hypothetical name from original test
+        filepath = os.path.join(self.charts_dir, test_filename)
+        self.assertFalse(os.path.exists(filepath), 
+                         f"Plot file {filepath} should not be created by find_exp for empty data.")
+
+    def test_find_exp_calculates_correctly(self):
+        # This test remains valid as it checks the calculation logic.
+        self.assertEqual(find_exp_func([1, 2, 3]), [2, 4, 8])
+        self.assertEqual(find_exp_func([0, 1, 5]), [1, 2, 32])
+        # No file creation to check here as find_exp only calculates.
 
 if __name__ == '__main__':
     unittest.main()

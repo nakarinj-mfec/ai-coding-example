@@ -47,9 +47,12 @@ class TestRefactor(unittest.TestCase):
         calculate_average_and_status(students_empty)
         self.assertEqual(students_empty, [])
 
-    def test_square_if_even_current_behavior(self):
-        self.assertIsNone(square_if_even([2, 4, 6]), "square_if_even should return None due to missing return statement")
-        self.assertIsNone(square_if_even([]), "square_if_even should return None")
+    def test_square_if_even(self):
+        self.assertEqual(square_if_even([]), [], "Empty list should return empty list")
+        self.assertEqual(square_if_even([2, 4, 6]), [4, 16, 36], "List with only even numbers")
+        self.assertEqual(square_if_even([1, 3, 5]), [], "List with only odd numbers")
+        self.assertEqual(square_if_even([1, 2, 3, 4, 5, 6]), [4, 16, 36], "List with mixed numbers")
+        self.assertEqual(square_if_even([-2, -4, 0]), [4, 16, 0], "List with negative evens and zero")
 
 if __name__ == '__main__':
     unittest.main()
